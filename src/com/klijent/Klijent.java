@@ -110,7 +110,6 @@ public class Klijent  implements Runnable{
             System.out.println(s);
             
             while (true) {
-                wait();
                 if (porukaSpremna) {
                     OUT.println(porukaZaSlanje);
                     System.out.println("Poslata poruka!");
@@ -120,6 +119,7 @@ public class Klijent  implements Runnable{
                         System.out.println(s);
                     porukaPrimljena = false;
                 }
+                Thread.sleep(500);
             } 
             
         } catch (IOException ex) {
@@ -135,12 +135,11 @@ public class Klijent  implements Runnable{
         startKlijent();
     }
     
-    public synchronized static void posalji(String poruka) {
+    public static void posalji(String poruka) {
         setPorukaZaSlanje(poruka);
         System.out.println("Namestena poruka za slanje: " + getPorukaZaSlanje());
         porukaSpremna = true;
         System.out.println("Poruka spremna: " + porukaSpremna);
     }
-    
     
 }

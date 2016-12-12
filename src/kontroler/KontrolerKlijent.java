@@ -16,7 +16,7 @@ public class KontrolerKlijent {
 
     private static ArrayList<Klijent> listaAktivnihKorisnika;
     private static KlijentGUIp glavniProzor;
-    
+
     private boolean porukaPrimljenaServer  = false;
     private boolean porukaSpremnaServer    = false;
     private boolean porukaSpremnaKlijent   = false;
@@ -30,7 +30,6 @@ public class KontrolerKlijent {
         k.run();
     }
     
-    
     public static void posalji() {
         
         String s = glavniProzor.getTxtNovaPoruka().getText();
@@ -40,6 +39,7 @@ public class KontrolerKlijent {
         } else {
             Klijent.posalji(s);
             glavniProzor.getTxtPoruka().append(s + "\n");
+            
         }
         
     }
@@ -52,4 +52,5 @@ public class KontrolerKlijent {
             });
     }
 
+    
 }

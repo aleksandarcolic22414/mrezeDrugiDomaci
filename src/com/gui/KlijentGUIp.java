@@ -5,10 +5,13 @@
  */
 package com.gui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import kontroler.KontrolerKlijent;
 
 /**
  *
@@ -123,6 +126,7 @@ public class KlijentGUIp extends javax.swing.JFrame {
     private void btnPosaljiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosaljiActionPerformed
         kontroler.KontrolerKlijent.posalji();
         getTxtNovaPoruka().setText("");
+        pokreniSlanjePorukeNit();
     }//GEN-LAST:event_btnPosaljiActionPerformed
 
 
@@ -178,6 +182,17 @@ public class KlijentGUIp extends javax.swing.JFrame {
     public void setTxtPoruka(JTextArea txtPoruka) {
         this.txtPoruka = txtPoruka;
     }
+
+    private synchronized void pokreniSlanjePorukeNit() {
+        try {
+            Thread.sleep(500);
+            notifyAll();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(KlijentGUIp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    
 
     
 }

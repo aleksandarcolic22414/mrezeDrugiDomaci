@@ -14,12 +14,12 @@ import javax.swing.JTextField;
  *
  * @author Korisnik
  */
-public class ServerGUI extends javax.swing.JFrame {
+public class KlijentGUIp extends javax.swing.JFrame {
 
     /**
      * Creates new form Glavna
      */
-    public ServerGUI() {
+    public KlijentGUIp() {
         initComponents();
     }
 
@@ -44,13 +44,14 @@ public class ServerGUI extends javax.swing.JFrame {
         btnPosalji = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Chat Server");
+        setTitle("Chat Klijent");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(435, 270));
         setPreferredSize(new java.awt.Dimension(650, 350));
 
         lblPoruka.setText("Chat:");
 
+        txtPoruka.setEditable(false);
         txtPoruka.setColumns(20);
         txtPoruka.setRows(5);
         jScrollPane1.setViewportView(txtPoruka);
@@ -59,11 +60,17 @@ public class ServerGUI extends javax.swing.JFrame {
 
         jLabel2.setText("Aktivni klijenti:");
 
+        txtAktivniKlijenti.setEditable(false);
         txtAktivniKlijenti.setColumns(20);
         txtAktivniKlijenti.setRows(5);
         jScrollPane2.setViewportView(txtAktivniKlijenti);
 
         btnPosalji.setText("Posalji");
+        btnPosalji.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPosaljiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlGlavniLayout = new javax.swing.GroupLayout(pnlGlavni);
         pnlGlavni.setLayout(pnlGlavniLayout);
@@ -113,41 +120,11 @@ public class ServerGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ServerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ServerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ServerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ServerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void btnPosaljiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosaljiActionPerformed
+        kontroler.KontrolerKlijent.posalji();
+        getTxtNovaPoruka().setText("");
+    }//GEN-LAST:event_btnPosaljiActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ServerGUI().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPosalji;
@@ -202,5 +179,5 @@ public class ServerGUI extends javax.swing.JFrame {
         this.txtPoruka = txtPoruka;
     }
 
-
+    
 }

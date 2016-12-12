@@ -13,13 +13,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Korisnik
- */
+
 public class ServerChat implements Runnable{
     
-    private final Socket klijent;
+    private Socket klijent;
     
     public ServerChat(Socket klijent) {
         this.klijent = klijent;

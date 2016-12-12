@@ -27,6 +27,7 @@ public class probaKlijent {
     public void glavna(){
         try {
             Socket klijent = new Socket("localhost", 555);
+            System.out.println("Povezan klijent");
             PrintStream OUT = new PrintStream(klijent.getOutputStream());
             
             for (int i = 0; i < 10; i++) {

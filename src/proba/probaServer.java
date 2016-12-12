@@ -29,7 +29,9 @@ public class probaServer {
     public void glavna(){
         try {
             ServerSocket server = new ServerSocket(555);
+            System.out.println("Napravljen server socket!");
             Socket klijent = server.accept();
+            System.out.println("Prihvacen klijent");
             
             BufferedReader IN = new BufferedReader(
                     new InputStreamReader(

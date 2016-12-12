@@ -2,16 +2,14 @@ package com.klijent;
 
 
 import com.server.ServerStrana;
-import interfaces.klijentInterfejs;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author Nepoznat
  */
-public class Klijent  implements klijentInterfejs, Runnable{
+public class Klijent  implements Runnable{
     
     public static void main(String[] args) {
         Klijent k = new Klijent();
@@ -34,8 +32,9 @@ public class Klijent  implements klijentInterfejs, Runnable{
     private String ime;
     private String pol;
     private Socket soc; 
-    private boolean porukaSpremna = false;
-    private boolean porukaPrimljena = false;
+    private static boolean porukaSpremna = false;
+    private static boolean porukaPrimljena = false;
+    private static String porukaZaSlanje = null;
     
     public Klijent(){}
 
@@ -68,24 +67,32 @@ public class Klijent  implements klijentInterfejs, Runnable{
         this.soc = soc;
     }
 
-    public boolean isPorukaSpremna() {
+    public static boolean isPorukaSpremna() {
         return porukaSpremna;
     }
 
-    public void setPorukaSpremna(boolean porukaSpremna) {
-        this.porukaSpremna = porukaSpremna;
+    public static void setPorukaSpremna(boolean porukaSpremna) {
+        Klijent.porukaSpremna = porukaSpremna;
     }
     
-    public boolean isPorukaPrimljena() {
+    public static boolean isPorukaPrimljena() {
         return porukaPrimljena;
     }
 
-    public void setPorukaPrimljena(boolean porukaPrimljena) {
-        this.porukaPrimljena = porukaPrimljena;
+    public static void setPorukaPrimljena(boolean porukaPrimljena) {
+        Klijent.porukaPrimljena = porukaPrimljena;
+    }
+
+    public static String getPorukaZaSlanje() {
+        return porukaZaSlanje;
+    }
+
+    public static void setPorukaZaSlanje(String porukaZaSlanje) {
+        Klijent.porukaZaSlanje = porukaZaSlanje;
     }
     
-    @Override
-    public void startKlijent(){
+    
+    public synchronized void startKlijent(){
         
         try {
             soc = new Socket("localhost", ServerStrana.PORT);
@@ -102,22 +109,24 @@ public class Klijent  implements klijentInterfejs, Runnable{
             String s = IN.readLine();
             System.out.println(s);
             
-            Scanner ulazZaKlijenta = new Scanner(System.in);
-            porukaSpremna = true;
-            porukaPrimljena = false;
-            
             while (true) {
-                if (porukaPrimljena)
+                wait();
+                if (porukaSpremna) {
+                    OUT.println(porukaZaSlanje);
+                    System.out.println("Poslata poruka!");
+                    porukaSpremna = false;
+                } else if (porukaPrimljena) {
                     while ((s = IN.readLine()) != null && !s.equals(""))
                         System.out.println(s);
-                if (porukaSpremna)
-                    while ((s = ulazZaKlijenta.nextLine()) != null) 
-                        OUT.println(s);
+                    porukaPrimljena = false;
+                }
             } 
             
         } catch (IOException ex) {
             Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
+        }  
     
     }
 
@@ -126,7 +135,12 @@ public class Klijent  implements klijentInterfejs, Runnable{
         startKlijent();
     }
     
-    
+    public synchronized static void posalji(String poruka) {
+        setPorukaZaSlanje(poruka);
+        System.out.println("Namestena poruka za slanje: " + getPorukaZaSlanje());
+        porukaSpremna = true;
+        System.out.println("Poruka spremna: " + porukaSpremna);
+    }
     
     
 }

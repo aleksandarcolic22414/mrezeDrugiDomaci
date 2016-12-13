@@ -49,9 +49,6 @@ public class ServerStrana {
                 
                 Socket klijentSocket = serverSocket.accept();
                 
-                Klijent noviKlijent = new Klijent("Aca", "muski");
-                listaAktivnihKlijenata.add(noviKlijent);
-                
                 new Thread(new ServerChat(klijentSocket)).start();
             }
             

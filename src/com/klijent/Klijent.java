@@ -21,26 +21,29 @@ import java.util.logging.Logger;
  *
  * @author Nepoznat
  */
-public class Klijent  implements Runnable{
+public class Klijent {
     
     public static void main(String[] args) {
         Klijent k = new Klijent();
-        k.run();
     }
     
     public static final int PORT = 444;
+    public static final String ADDRESS = "localhost";
     private String ime;
     private String pol;
     private Socket soc; 
     private static boolean porukaSpremna = false;
     private static boolean porukaPrimljena = false;
     private static String porukaZaSlanje = null;
+    private static PrintStream OUT;
+    private static BufferedReader IN;
     
     public Klijent(){}
 
-    public Klijent(String ime, String pol) {
+    public Klijent(String ime, String pol) throws IOException {
         this.ime = ime;
         this.pol = pol;
+        soc = new Socket(ADDRESS, PORT);
     }
     
     public String getIme() {
@@ -92,54 +95,31 @@ public class Klijent  implements Runnable{
     }
     
     
-    public synchronized void startKlijent(){
+    public void startKlijent(){
         
         try {
-            soc = new Socket("localhost", ServerStrana.PORT);
-            
-            PrintStream OUT = new PrintStream(
+            OUT = new PrintStream(
                     soc.getOutputStream());
-            
             OUT.println("Desi serveru, legendo?");
             
-            BufferedReader IN = new BufferedReader(
+            IN = new BufferedReader(
                     new InputStreamReader(
                         soc.getInputStream()));
             
             String s = IN.readLine();
             System.out.println(s);
-            
-            while (true) {
-                if (porukaSpremna) {
-                    OUT.println(porukaZaSlanje);
-                    System.out.println("Poslata poruka!");
-                    porukaSpremna = false;
-                } else if (porukaPrimljena) {
-                    while ((s = IN.readLine()) != null && !s.equals(""))
-                        System.out.println(s);
-                    porukaPrimljena = false;
-                }
-                Thread.sleep(500);
-            } 
-            
+             
         } catch (IOException ex) {
             Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+        } 
     
-    }
-
-    @Override
-    public void run() {
-        startKlijent();
     }
     
     public static void posalji(String poruka) {
         setPorukaZaSlanje(poruka);
-        System.out.println("Namestena poruka za slanje: " + getPorukaZaSlanje());
         porukaSpremna = true;
-        System.out.println("Poruka spremna: " + porukaSpremna);
+        OUT.println(poruka);
+        porukaSpremna = false;
     }
     
 }

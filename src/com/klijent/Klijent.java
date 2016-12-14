@@ -26,6 +26,7 @@ import kontroler.KontrolerKlijent;
 public class Klijent implements Runnable {
     
     public static final int PORT = 444;
+//    lokalna ip adresa /// promeniti po potrebi
     public static final String ADDRESS = "localhost";
     private String ime;
     private String pol;
@@ -143,7 +144,7 @@ public class Klijent implements Runnable {
         } 
     
     }
-    
+
     public void posalji(String poruka) {
         OUT.println(poruka);
     }

@@ -6,6 +6,7 @@
 package com.gui;
 
 import com.klijent.Klijent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,8 +63,19 @@ public class logInKorisnikGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Ime:");
+
+        txtIme.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtImeKeyPressed(evt);
+            }
+        });
 
         jLabel2.setText("Pol:");
 
@@ -134,29 +146,7 @@ public class logInKorisnikGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-        String ime = getTxtIme().getText().trim();
-        if (ime == null || ime.equals("")) {
-            JOptionPane.showMessageDialog(this, "Unesite vase ime!");
-        } else if (ime.length() > 25) {
-            JOptionPane.showMessageDialog(this, "Unesite nadimak, cisto da ne pukne program!");
-        } else {
-            try {
-                Klijent noviKlijent;
-                
-                if (getRbtnMuskiPol().isSelected())
-                    noviKlijent = new Klijent(ime, "Muski");
-                else
-                    noviKlijent = new Klijent(ime, "Zenski");
-                
-                KontrolerKlijent.pokreniKlijentGUI(noviKlijent);
-                this.dispose();
-                
-            } catch (IOException ex) {
-                Logger.getLogger(logInKorisnikGUI.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Doslo je do problema prilikom povezivanja sa serverom!",
-                    "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        logInAkcija();
     }//GEN-LAST:event_btnLogInActionPerformed
 
     private void rbtnMuskiPolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnMuskiPolActionPerformed
@@ -166,6 +156,16 @@ public class logInKorisnikGUI extends javax.swing.JFrame {
     private void rbtnZenskiPolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnZenskiPolActionPerformed
         getRbtnMuskiPol().setSelected(false);
     }//GEN-LAST:event_rbtnZenskiPolActionPerformed
+
+    private void txtImeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtImeKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            logInAkcija();
+        }
+    }//GEN-LAST:event_txtImeKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -241,6 +241,17 @@ public class logInKorisnikGUI extends javax.swing.JFrame {
 
     public void setTxtIme(JTextField txtIme) {
         this.txtIme = txtIme;
+    }
+
+    private void logInAkcija() {
+        String ime = getTxtIme().getText().trim();
+        boolean pol;
+        if (getRbtnMuskiPol().isSelected())
+            pol = true;
+        else
+            pol = false;
+                
+        KontrolerKlijent.logInAkcijaKon(ime, pol);
     }
 
 

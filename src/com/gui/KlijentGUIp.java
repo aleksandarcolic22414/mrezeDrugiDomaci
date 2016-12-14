@@ -6,9 +6,11 @@
 package com.gui;
 
 import com.klijent.Klijent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -25,6 +27,22 @@ public class KlijentGUIp extends javax.swing.JFrame {
     public KlijentGUIp(Klijent k) {
         this.k = k;
         initComponents();
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int x = JOptionPane.showConfirmDialog(null, 
+                        "Da li zelite da izadjete iz chat-a?",
+                            "Izlaz", JOptionPane.YES_NO_OPTION,
+                                JOptionPane.INFORMATION_MESSAGE);
+                if (x == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                    KontrolerKlijent.zatvaranje();
+                }
+            }
+            
+        });
+        this.getTxtNovaPoruka().requestFocus();
+        getTxtAktivanKorisnik().setText(KontrolerKlijent.getAktivniKlijent());
     }
 
     /**
@@ -46,12 +64,19 @@ public class KlijentGUIp extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAktivniKlijenti = new javax.swing.JTextArea();
         btnPosalji = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtAktivanKorisnik = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Chat Klijent");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(435, 270));
         setPreferredSize(new java.awt.Dimension(650, 350));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         lblPoruka.setText("Chat:");
 
@@ -61,6 +86,17 @@ public class KlijentGUIp extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txtPoruka);
 
         jLabel1.setText("Nova poruka:");
+
+        txtNovaPoruka.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNovaPorukaActionPerformed(evt);
+            }
+        });
+        txtNovaPoruka.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtNovaPorukaKeyPressed(evt);
+            }
+        });
 
         jLabel2.setText("Aktivni klijenti:");
 
@@ -76,6 +112,10 @@ public class KlijentGUIp extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Klijent: ");
+
+        txtAktivanKorisnik.setEditable(false);
+
         javax.swing.GroupLayout pnlGlavniLayout = new javax.swing.GroupLayout(pnlGlavni);
         pnlGlavni.setLayout(pnlGlavniLayout);
         pnlGlavniLayout.setHorizontalGroup(
@@ -83,10 +123,6 @@ public class KlijentGUIp extends javax.swing.JFrame {
             .addGroup(pnlGlavniLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlGlavniLayout.createSequentialGroup()
-                        .addComponent(lblPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(250, 250, 250)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlGlavniLayout.createSequentialGroup()
                         .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -96,12 +132,25 @@ public class KlijentGUIp extends javax.swing.JFrame {
                                 .addGap(10, 10, 10)
                                 .addComponent(btnPosalji, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(30, 30, 30)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlGlavniLayout.createSequentialGroup()
+                        .addComponent(lblPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(250, 250, 250)
+                        .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlGlavniLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtAktivanKorisnik, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         pnlGlavniLayout.setVerticalGroup(
             pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlGlavniLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(7, 7, 7)
+                .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtAktivanKorisnik, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -129,15 +178,32 @@ public class KlijentGUIp extends javax.swing.JFrame {
         getTxtNovaPoruka().setText("");
     }//GEN-LAST:event_btnPosaljiActionPerformed
 
+    private void txtNovaPorukaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNovaPorukaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            KontrolerKlijent.posalji();
+            getTxtNovaPoruka().setText("");
+        }
+    }//GEN-LAST:event_txtNovaPorukaKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+    }//GEN-LAST:event_formWindowClosing
+
+    private void txtNovaPorukaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNovaPorukaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNovaPorukaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPosalji;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblPoruka;
     private javax.swing.JPanel pnlGlavni;
+    private javax.swing.JTextField txtAktivanKorisnik;
     private javax.swing.JTextArea txtAktivniKlijenti;
     private javax.swing.JTextField txtNovaPoruka;
     private javax.swing.JTextArea txtPoruka;
@@ -167,7 +233,7 @@ public class KlijentGUIp extends javax.swing.JFrame {
         this.txtAktivniKlijenti = txtAktivniKlijenti;
     }
 
-    public JTextField getTxtNovaPoruka() {
+    public final JTextField getTxtNovaPoruka() {
         return txtNovaPoruka;
     }
 
@@ -181,6 +247,14 @@ public class KlijentGUIp extends javax.swing.JFrame {
 
     public void setTxtPoruka(JTextArea txtPoruka) {
         this.txtPoruka = txtPoruka;
+    }
+
+    public JTextField getTxtAktivanKorisnik() {
+        return txtAktivanKorisnik;
+    }
+
+    public void setTxtAktivanKorisnik(JTextField txtAktivanKorisnik) {
+        this.txtAktivanKorisnik = txtAktivanKorisnik;
     }
     
 }

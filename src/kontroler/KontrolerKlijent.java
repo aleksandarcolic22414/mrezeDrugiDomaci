@@ -8,7 +8,12 @@ package kontroler;
 import com.gui.KlijentGUIp;
 import com.gui.logInKorisnikGUI;
 import com.klijent.Klijent;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 
@@ -94,7 +99,7 @@ public class KontrolerKlijent {
             return;
         } else {
             aktivniKlijent.posalji(s);
-            glavniProzor.getTxtPoruka().append(s + "\n");
+            glavniProzor.getTxtPoruka().append("Me: " + s + "\n");
         }
         
     }
@@ -103,8 +108,42 @@ public class KontrolerKlijent {
         if (glavniProzor == null) 
             System.out.println("Nije inicijalizovan glavni prozor!");
         else
-            glavniProzor.getTxtPoruka().append("Nova poruka: " + porukaPrimljenaPoruka + "\n");
+            glavniProzor.getTxtPoruka().append(porukaPrimljenaPoruka + "\n");
     }
     
+    public static void zatvaranje() {
+        try {
+            listaAktivnihKorisnika.remove(aktivniKlijent);
+            Socket soc = aktivniKlijent.getSoc();
+            if (soc.isConnected())
+                soc.close();
+        } catch (IOException ex) {
+            Logger.getLogger(KontrolerKlijent.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void logInAkcijaKon(String ime, boolean muskiPol) {
+        if (ime == null || ime.equals("")) {
+            JOptionPane.showMessageDialog(null, "Unesite vase ime!");
+        } else if (ime.length() > 25) {
+            JOptionPane.showMessageDialog(null, "Unesite nadimak, cisto da ne pukne program!");
+        } else {
+            try {
+                Klijent noviKlijent;
+                noviKlijent = new Klijent(ime, muskiPol ? "Muski" : "Zenski");
+                
+                KontrolerKlijent.pokreniKlijentGUI(noviKlijent);
+                logInProzor.dispose();
+            } catch (IOException ex) {
+                Logger.getLogger(logInKorisnikGUI.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Doslo je do problema prilikom povezivanja sa serverom!",
+                    "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public static String getAktivniKlijent() {
+        return aktivniKlijent.getIme();
+    }
     
 }

@@ -8,6 +8,7 @@ package kontroler;
 import com.klijent.Klijent;
 import com.server.ServerStrana;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,12 +31,23 @@ public class KontrolerServer {
     public static void posalji(String s, Klijent k) {
         for (Klijent klijent : listaAktivnihKlijenataServer) {
             if (klijent != k)
-                klijent.getOUT().println(s);
+                klijent.getOUT().println(k.getIme() + ": " + s);
         }
     }
 
     public static void dodajKorisnika(Klijent noviKlijent) {
         listaAktivnihKlijenataServer.add(noviKlijent);
+    }
+
+    public static void odjaviKorisnika(Klijent noviKlijent) {
+        try {
+            listaAktivnihKlijenataServer.remove(noviKlijent);
+            Socket soc = noviKlijent.getSoc();
+            if (soc.isConnected())
+                soc.close();
+        } catch (IOException ex) {
+            Logger.getLogger(KontrolerServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

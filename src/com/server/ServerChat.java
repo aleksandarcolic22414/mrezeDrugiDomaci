@@ -14,11 +14,14 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kontroler.KontrolerServer;
+import sun.java2d.d3d.D3DRenderQueue;
+
 
 
 public class ServerChat implements Runnable {
     
     private final Socket klijentSocket;
+    private Klijent noviKlijent;
     
     public ServerChat(Socket klijentSocket) {
         this.klijentSocket = klijentSocket;
@@ -35,7 +38,7 @@ public class ServerChat implements Runnable {
             String ime = input.substring(0, index = input.lastIndexOf(" "));
             String pol = input.substring(index + 1);
             
-            Klijent noviKlijent = new Klijent(ime, pol, klijentSocket);
+            noviKlijent = new Klijent(ime, pol, klijentSocket);
             System.out.println(input);
 
             PrintStream OUT = new PrintStream(
@@ -49,23 +52,18 @@ public class ServerChat implements Runnable {
                         + KontrolerServer.listaAktivnihKlijenataServer);
             KontrolerServer.dodajKorisnika(noviKlijent);
             String s;
-//            Upravo dodato, proba
-//            Thread.sleep(500);
-//            noviKlijent.getOUT().println("Pozdrav od servera!");
-//            Thread.sleep(5000);
-//            noviKlijent.getOUT().println("Pozdrav od servera!");
-//            Thread.sleep(10000);
-//            noviKlijent.getOUT().println("Pozdrav od servera!");
-//            proba
+
             while (true) {
                 while ((s = IN.readLine()) != null) {
-                    System.out.println(s);
+//                    Odraditi stampanje u file, umesto na System.out!
+                    System.out.println(noviKlijent.getIme() + ": " + s);
                     KontrolerServer.posalji(s, noviKlijent);
                 }
             }
             
         } catch (IOException ex) {
-            Logger.getLogger(ServerChat.class.getName()).log(Level.SEVERE, null, ex);
+            KontrolerServer.odjaviKorisnika(noviKlijent);
+            System.err.println("Prekinuta veza sa korisnikom: " + noviKlijent.getIme());
         }
         
         

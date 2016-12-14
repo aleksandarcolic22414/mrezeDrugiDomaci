@@ -31,6 +31,7 @@ public class Klijent {
     private static boolean porukaSpremna = false;
     private static boolean porukaPrimljena = false;
     private static String porukaZaSlanje = null;
+    private static String porukaPrimljenaPoruka = null;
     private PrintStream OUT;
     private BufferedReader IN;
     
@@ -129,6 +130,22 @@ public class Klijent {
         return this.ime + " " + this.pol;
     }
     
+    public void slusaj() {
+        while (true) {
+            try {
+                if (isPorukaSpremna()) {
+                    OUT.println(getPorukaZaSlanje());
+                    setPorukaSpremna(false);
+                }
+                if (isPorukaPrimljena()) {
+                    porukaPrimljenaPoruka = IN.readLine();
+                    setPorukaPrimljena(false);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    } 
     
     
 }

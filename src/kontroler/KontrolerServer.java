@@ -19,6 +19,7 @@ public class KontrolerServer {
     
     public static void main(String[] args) {
         try {
+            listaAktivnihKlijenataServer = new ArrayList<>();
             ServerStrana server = new ServerStrana();
             server.startServer();
         } catch (IOException ex) {

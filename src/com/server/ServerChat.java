@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kontroler.KontrolerServer;
 
 
 public class ServerChat implements Runnable {
@@ -35,12 +35,12 @@ public class ServerChat implements Runnable {
             String pol = input.substring(index + 1);
             
             Klijent noviKlijent = new Klijent(ime, pol, klijentSocket);
-            ServerStrana.listaAktivnihKlijenata.add(noviKlijent);
+            KontrolerServer.listaAktivnihKlijenataServer.add(noviKlijent);
             System.out.println(input);
 
             PrintStream OUT = new PrintStream(klijentSocket.getOutputStream());
             
-            OUT.println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() + " Aktivni korisnici: " + ServerStrana.listaAktivnihKlijenata);
+            OUT.println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() + " Aktivni korisnici: " + KontrolerServer.listaAktivnihKlijenataServer);
             String s;
             while (true) {
                 while ((s = IN.readLine()) != null)

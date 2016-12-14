@@ -25,19 +25,9 @@ import java.util.logging.Logger;
 public class ServerStrana {
     
     public static final int PORT = 444;
-    public static ArrayList<Klijent> listaAktivnihKlijenata;
     
     public ServerStrana(){}
-    
-    public static void main(String[] args) {
-        try {
-            ServerStrana server = new ServerStrana();
-            server.startServer();
-        } catch (IOException ex) {
-            Logger.getLogger(ServerStrana.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+   
     public void startServer() throws IOException{
         
         ServerSocket serverSocket = new ServerSocket(PORT);

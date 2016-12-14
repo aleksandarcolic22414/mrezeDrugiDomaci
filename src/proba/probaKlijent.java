@@ -8,6 +8,7 @@ package proba;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -31,29 +32,18 @@ public class probaKlijent {
         try {
             Socket klijent = new Socket("localhost", 555);
             
-            PrintStream OUT = new PrintStream(
+            ObjectOutputStream objectOUT = new ObjectOutputStream(
                     klijent.getOutputStream());
             
-//            BufferedReader IN = new BufferedReader(
-//                    new InputStreamReader(
-//                        klijent.getInputStream()));
-           
-            OUT.println("Desi serveru, legendo?");
-//            String s = IN.readLine();
-//            System.out.println(s);
-//            for (int i = 0; i < 10; i++) {
-//                OUT.println("Pozdrav " + (i+1) + "-ti put");
-//            }
             
-            Scanner input = new Scanner(System.in);
-            while (true) {
-                String s = input.nextLine();
-                OUT.println(s);
-            }
             
+                Objekat noviObjekat = new Objekat("Aleksandar", 
+                        "Colic", "Muski", new Socket("localhost", 555));
+                objectOUT.writeObject(noviObjekat);
+             
         } catch (IOException ex) {
             Logger.getLogger(probaKlijent.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
         
     }
     

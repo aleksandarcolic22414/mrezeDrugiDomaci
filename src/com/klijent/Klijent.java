@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import kontroler.KontrolerKlijent;
 
 
@@ -160,6 +161,9 @@ public class Klijent implements Runnable {
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Doslo je do prekida konekcije sa serverom!",
+                    "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
+                return;
             }
         }
     } 

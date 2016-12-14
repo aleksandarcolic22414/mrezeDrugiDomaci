@@ -27,8 +27,15 @@ public class KontrolerServer {
         }
     }
 
-    public static void posalji(String s) {
-        
+    public static void posalji(String s, Klijent k) {
+        for (Klijent klijent : listaAktivnihKlijenataServer) {
+            if (klijent != k)
+                klijent.getOUT().println(s);
+        }
+    }
+
+    public static void dodajKorisnika(Klijent noviKlijent) {
+        listaAktivnihKlijenataServer.add(noviKlijent);
     }
     
     

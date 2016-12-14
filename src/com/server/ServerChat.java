@@ -36,7 +36,6 @@ public class ServerChat implements Runnable {
             String pol = input.substring(index + 1);
             
             Klijent noviKlijent = new Klijent(ime, pol, klijentSocket);
-            KontrolerServer.listaAktivnihKlijenataServer.add(noviKlijent);
             System.out.println(input);
 
             PrintStream OUT = new PrintStream(
@@ -44,30 +43,28 @@ public class ServerChat implements Runnable {
             
             noviKlijent.setIN(IN);
             noviKlijent.setOUT(OUT);
-            
+             
             noviKlijent.getOUT().println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() 
                     + " Aktivni korisnici: " 
                         + KontrolerServer.listaAktivnihKlijenataServer);
+            KontrolerServer.dodajKorisnika(noviKlijent);
             String s;
 //            Upravo dodato, proba
-            Thread.sleep(500);
-            noviKlijent.getOUT().println("Pozdrav od servera!");
-            Thread.sleep(5000);
-            noviKlijent.getOUT().println("Pozdrav od servera!");
-            Thread.sleep(10000);
-            noviKlijent.getOUT().println("Pozdrav od servera!");
+//            Thread.sleep(500);
+//            noviKlijent.getOUT().println("Pozdrav od servera!");
+//            Thread.sleep(5000);
+//            noviKlijent.getOUT().println("Pozdrav od servera!");
+//            Thread.sleep(10000);
+//            noviKlijent.getOUT().println("Pozdrav od servera!");
 //            proba
             while (true) {
                 while ((s = IN.readLine()) != null) {
                     System.out.println(s);
-//                    KontrolerServer.posalji(s);
-                
+                    KontrolerServer.posalji(s, noviKlijent);
                 }
             }
             
         } catch (IOException ex) {
-            Logger.getLogger(ServerChat.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
             Logger.getLogger(ServerChat.class.getName()).log(Level.SEVERE, null, ex);
         }
         

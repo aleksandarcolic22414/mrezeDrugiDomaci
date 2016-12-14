@@ -5,9 +5,11 @@
  */
 package proba;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -27,22 +29,20 @@ public class probaServerChat implements Runnable {
 
     public void startChat(){
         try {
-            BufferedReader IN = new BufferedReader(
-                    new InputStreamReader(
-                        klijentSocket.getInputStream()));
-            String input = IN.readLine();
-            System.out.println(input);
-
-            PrintStream OUT = new PrintStream(klijentSocket.getOutputStream());
             
-            OUT.println("Ostvarena konekcija!");
-            String s;
+            Objekat obj;
+            ObjectInputStream objectIN = new ObjectInputStream(
+                    new BufferedInputStream(
+                            klijentSocket.getInputStream()));
             while (true) {
-                while ((s = IN.readLine()) != null)
-                    System.out.println(s);
+                while ((obj = (Objekat)objectIN.readObject()) != null) {
+                    System.out.println("Procitan objekat: " + obj);
+                }
             }
             
         } catch (IOException ex) {
+            Logger.getLogger(probaServerChat.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(probaServerChat.class.getName()).log(Level.SEVERE, null, ex);
         }
         

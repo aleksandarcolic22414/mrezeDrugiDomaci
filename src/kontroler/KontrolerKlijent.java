@@ -30,19 +30,6 @@ public class KontrolerKlijent {
         logInProzor.setVisible(true);
     }
     
-    public static void posalji() {
-        
-        String s = glavniProzor.getTxtNovaPoruka().getText();
-        if (s == null || s.equals("")) {
-            return;
-        } else {
-            aktivniKlijent.posalji(s);
-            glavniProzor.getTxtPoruka().append(s + "\n");
-        }
-        
-    }
-    
-
     public static void pokreniKlijentGUI(Klijent k) {
         aktivniKlijent = k;
         aktivniKlijent.startKlijent();
@@ -71,6 +58,7 @@ public class KontrolerKlijent {
                     glavniProzor.setVisible(true);
                 }
             });
+        new Thread(k).start();
     }
     
     public static void pokreniLogInKorisnikGUI() {
@@ -97,5 +85,25 @@ public class KontrolerKlijent {
             }
         });
     }
+    
+    public static void posalji() {
+        
+        String s = glavniProzor.getTxtNovaPoruka().getText();
+        if (s == null || s.equals("")) {
+            return;
+        } else {
+            aktivniKlijent.posalji(s);
+            glavniProzor.getTxtPoruka().append(s + "\n");
+        }
+        
+    }
+    
+    public static void ispisiPoruku(String porukaPrimljenaPoruka) {
+        if (glavniProzor == null) 
+            System.out.println("Nije inicijalizovan glavni prozor!");
+        else
+            glavniProzor.getTxtPoruka().append("Nova poruka: " + porukaPrimljenaPoruka + "\n");
+    }
+    
     
 }

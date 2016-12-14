@@ -18,7 +18,7 @@ import kontroler.KontrolerServer;
 
 public class ServerChat implements Runnable {
     
-    private Socket klijentSocket;
+    private final Socket klijentSocket;
     
     public ServerChat(Socket klijentSocket) {
         this.klijentSocket = klijentSocket;
@@ -40,14 +40,26 @@ public class ServerChat implements Runnable {
 
             PrintStream OUT = new PrintStream(klijentSocket.getOutputStream());
             
-            OUT.println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() + " Aktivni korisnici: " + KontrolerServer.listaAktivnihKlijenataServer);
+            OUT.println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() 
+                    + " Aktivni korisnici: " 
+                        + KontrolerServer.listaAktivnihKlijenataServer);
             String s;
+//            Upravo dodato, proba
+            Thread.sleep(500);
+            OUT.println("Pozdrav od servera!");
+            Thread.sleep(5000);
+            OUT.println("Pozdrav od servera!");
+            Thread.sleep(10000);
+            OUT.println("Pozdrav od servera!");
+//            proba
             while (true) {
                 while ((s = IN.readLine()) != null)
                     System.out.println(s);
             }
             
         } catch (IOException ex) {
+            Logger.getLogger(ServerChat.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(ServerChat.class.getName()).log(Level.SEVERE, null, ex);
         }
         

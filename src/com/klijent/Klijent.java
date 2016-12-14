@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kontroler.KontrolerKlijent;
 
 
 /*
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author Nepoznat
  */
-public class Klijent {
+public class Klijent implements Runnable {
     
     public static final int PORT = 444;
     public static final String ADDRESS = "localhost";
@@ -119,10 +120,7 @@ public class Klijent {
     }
     
     public void posalji(String poruka) {
-        setPorukaZaSlanje(poruka);
-        porukaSpremna = true;
         OUT.println(poruka);
-        porukaSpremna = false;
     }
 
     @Override
@@ -133,19 +131,19 @@ public class Klijent {
     public void slusaj() {
         while (true) {
             try {
-                if (isPorukaSpremna()) {
-                    OUT.println(getPorukaZaSlanje());
-                    setPorukaSpremna(false);
-                }
-                if (isPorukaPrimljena()) {
-                    porukaPrimljenaPoruka = IN.readLine();
-                    setPorukaPrimljena(false);
+                if ((porukaPrimljenaPoruka = IN.readLine()) != null) {
+                    KontrolerKlijent.ispisiPoruku(porukaPrimljenaPoruka);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     } 
+
+    @Override
+    public void run() {
+        slusaj();
+    }
     
     
 }

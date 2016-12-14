@@ -5,7 +5,9 @@
  */
 package proba;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -22,22 +24,31 @@ public class probaKlijent {
     public static void main(String[] args) {
         probaKlijent p = new probaKlijent();
         p.glavna();
+        
     }
     
     public void glavna(){
         try {
             Socket klijent = new Socket("localhost", 555);
-            System.out.println("Povezan klijent");
-            PrintStream OUT = new PrintStream(klijent.getOutputStream());
             
-            for (int i = 0; i < 10; i++) {
-                OUT.println("Pozdrav " + (i+1) + "-ti put");
-            }
+            PrintStream OUT = new PrintStream(
+                    klijent.getOutputStream());
             
-            Scanner IN = new Scanner(System.in);
+//            BufferedReader IN = new BufferedReader(
+//                    new InputStreamReader(
+//                        klijent.getInputStream()));
+           
+            OUT.println("Desi serveru, legendo?");
+//            String s = IN.readLine();
+//            System.out.println(s);
+//            for (int i = 0; i < 10; i++) {
+//                OUT.println("Pozdrav " + (i+1) + "-ti put");
+//            }
             
+            Scanner input = new Scanner(System.in);
             while (true) {
-                OUT.println(IN.nextLine());
+                String s = input.nextLine();
+                OUT.println(s);
             }
             
         } catch (IOException ex) {

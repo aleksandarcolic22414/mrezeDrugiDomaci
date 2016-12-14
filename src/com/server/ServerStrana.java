@@ -27,9 +27,7 @@ public class ServerStrana {
     public static final int PORT = 444;
     public static ArrayList<Klijent> listaAktivnihKlijenata;
     
-    public ServerStrana(){
-        listaAktivnihKlijenata = new ArrayList<>();
-    }
+    public ServerStrana(){}
     
     public static void main(String[] args) {
         try {
@@ -46,13 +44,10 @@ public class ServerStrana {
         
         try {
             while (true) {
-                
                 Socket klijentSocket = serverSocket.accept();
-                
-                new Thread(new ServerChat(klijentSocket)).start();
+                Thread X = new Thread(new ServerChat(klijentSocket));
+                X.start();
             }
-            
-            
         } catch (IOException ex) {
             Logger.getLogger(ServerStrana.class.getName()).log(Level.SEVERE, null, ex);
         }

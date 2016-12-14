@@ -23,10 +23,6 @@ import java.util.logging.Logger;
  */
 public class Klijent {
     
-    public static void main(String[] args) {
-        Klijent k = new Klijent();
-    }
-    
     public static final int PORT = 444;
     public static final String ADDRESS = "localhost";
     private String ime;
@@ -35,8 +31,8 @@ public class Klijent {
     private static boolean porukaSpremna = false;
     private static boolean porukaPrimljena = false;
     private static String porukaZaSlanje = null;
-    private static PrintStream OUT;
-    private static BufferedReader IN;
+    private PrintStream OUT;
+    private BufferedReader IN;
     
     public Klijent(){}
 
@@ -45,6 +41,13 @@ public class Klijent {
         this.pol = pol;
         soc = new Socket(ADDRESS, PORT);
     }
+    
+    public Klijent(String ime, String pol, Socket soc) {
+        this.ime = ime;
+        this.pol = pol;
+        this.soc = soc;
+    }
+    
     
     public String getIme() {
         return ime;
@@ -100,26 +103,32 @@ public class Klijent {
         try {
             OUT = new PrintStream(
                     soc.getOutputStream());
-            OUT.println("Desi serveru, legendo?");
-            
             IN = new BufferedReader(
                     new InputStreamReader(
                         soc.getInputStream()));
-            
+           
+            OUT.println(this);
             String s = IN.readLine();
             System.out.println(s);
-             
+            
         } catch (IOException ex) {
             Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
         } 
     
     }
     
-    public static void posalji(String poruka) {
+    public void posalji(String poruka) {
         setPorukaZaSlanje(poruka);
         porukaSpremna = true;
         OUT.println(poruka);
         porukaSpremna = false;
     }
+
+    @Override
+    public String toString() {
+        return this.ime + " " + this.pol;
+    }
+    
+    
     
 }

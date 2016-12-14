@@ -17,7 +17,7 @@ public class KontrolerKlijent {
     private static ArrayList<Klijent> listaAktivnihKorisnika;
     private static KlijentGUIp glavniProzor;
     private static logInKorisnikGUI logInProzor;
-    private static Klijent k;
+    private static Klijent aktivniKlijent;
 
     private boolean porukaPrimljenaServer  = false;
     private boolean porukaSpremnaServer    = false;
@@ -36,7 +36,7 @@ public class KontrolerKlijent {
         if (s == null || s.equals("")) {
             return;
         } else {
-            Klijent.posalji(s);
+            aktivniKlijent.posalji(s);
             glavniProzor.getTxtPoruka().append(s + "\n");
         }
         
@@ -44,8 +44,27 @@ public class KontrolerKlijent {
     
 
     public static void pokreniKlijentGUI(Klijent k) {
-        k.startKlijent();
+        aktivniKlijent = k;
+        aktivniKlijent.startKlijent();
         listaAktivnihKorisnika.add(k);
+        
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     glavniProzor = new KlijentGUIp(k);
@@ -54,7 +73,7 @@ public class KontrolerKlijent {
             });
     }
     
-    public static void pokreniLogInKorisnikGUI(){
+    public static void pokreniLogInKorisnikGUI() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

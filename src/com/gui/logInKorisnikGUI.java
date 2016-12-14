@@ -25,6 +25,22 @@ public class logInKorisnikGUI extends javax.swing.JFrame {
      * Creates new form logInKorisnikGUI
      */
     public logInKorisnikGUI() {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(logInKorisnikGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
         initComponents();
     }
 
@@ -118,30 +134,27 @@ public class logInKorisnikGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-        String ime = getTxtIme().getText();
+        String ime = getTxtIme().getText().trim();
         if (ime == null || ime.equals("")) {
             JOptionPane.showMessageDialog(this, "Unesite vase ime!");
+        } else if (ime.length() > 25) {
+            JOptionPane.showMessageDialog(this, "Unesite nadimak, cisto da ne pukne program!");
         } else {
-            Klijent noviKlijent = null;
-            if (getRbtnMuskiPol().isSelected()) {
-                try {
+            try {
+                Klijent noviKlijent;
+                
+                if (getRbtnMuskiPol().isSelected())
                     noviKlijent = new Klijent(ime, "Muski");
-                } catch (IOException ex) {
-                    Logger.getLogger(logInKorisnikGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                try {
+                else
                     noviKlijent = new Klijent(ime, "Zenski");
-                } catch (IOException ex) {
-                    Logger.getLogger(logInKorisnikGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            if (noviKlijent == null) {
-                JOptionPane.showMessageDialog(this, "Doslo je do problema prilikom povezivanja sa serverom!", 
-                        "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
-            } else {
+                
                 KontrolerKlijent.pokreniKlijentGUI(noviKlijent);
                 this.dispose();
+                
+            } catch (IOException ex) {
+                Logger.getLogger(logInKorisnikGUI.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Doslo je do problema prilikom povezivanja sa serverom!",
+                    "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnLogInActionPerformed

@@ -98,6 +98,30 @@ public class Klijent implements Runnable {
     public static void setPorukaZaSlanje(String porukaZaSlanje) {
         Klijent.porukaZaSlanje = porukaZaSlanje;
     }
+
+    public static String getPorukaPrimljenaPoruka() {
+        return porukaPrimljenaPoruka;
+    }
+
+    public static void setPorukaPrimljenaPoruka(String porukaPrimljenaPoruka) {
+        Klijent.porukaPrimljenaPoruka = porukaPrimljenaPoruka;
+    }
+
+    public PrintStream getOUT() {
+        return OUT;
+    }
+
+    public void setOUT(PrintStream OUT) {
+        this.OUT = OUT;
+    }
+
+    public BufferedReader getIN() {
+        return IN;
+    }
+
+    public void setIN(BufferedReader IN) {
+        this.IN = IN;
+    }
     
     
     public void startKlijent(){

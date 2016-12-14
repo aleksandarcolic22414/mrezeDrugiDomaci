@@ -31,6 +31,7 @@ public class KontrolerKlijent {
     }
     
     public static void pokreniKlijentGUI(Klijent k) {
+        
         aktivniKlijent = k;
         aktivniKlijent.startKlijent();
         listaAktivnihKorisnika.add(k);

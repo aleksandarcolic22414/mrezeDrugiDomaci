@@ -26,6 +26,10 @@ public class KontrolerServer {
             Logger.getLogger(KontrolerServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public static void posalji(String s) {
+        
+    }
     
     
 }

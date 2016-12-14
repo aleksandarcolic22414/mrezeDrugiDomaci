@@ -29,6 +29,7 @@ public class ServerChat implements Runnable {
             BufferedReader IN = new BufferedReader(
                     new InputStreamReader(
                         klijentSocket.getInputStream()));
+            
             String input = IN.readLine();
             int index;
             String ime = input.substring(0, index = input.lastIndexOf(" "));
@@ -38,23 +39,30 @@ public class ServerChat implements Runnable {
             KontrolerServer.listaAktivnihKlijenataServer.add(noviKlijent);
             System.out.println(input);
 
-            PrintStream OUT = new PrintStream(klijentSocket.getOutputStream());
+            PrintStream OUT = new PrintStream(
+                    klijentSocket.getOutputStream());
             
-            OUT.println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() 
+            noviKlijent.setIN(IN);
+            noviKlijent.setOUT(OUT);
+            
+            noviKlijent.getOUT().println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() 
                     + " Aktivni korisnici: " 
                         + KontrolerServer.listaAktivnihKlijenataServer);
             String s;
 //            Upravo dodato, proba
             Thread.sleep(500);
-            OUT.println("Pozdrav od servera!");
+            noviKlijent.getOUT().println("Pozdrav od servera!");
             Thread.sleep(5000);
-            OUT.println("Pozdrav od servera!");
+            noviKlijent.getOUT().println("Pozdrav od servera!");
             Thread.sleep(10000);
-            OUT.println("Pozdrav od servera!");
+            noviKlijent.getOUT().println("Pozdrav od servera!");
 //            proba
             while (true) {
-                while ((s = IN.readLine()) != null)
+                while ((s = IN.readLine()) != null) {
                     System.out.println(s);
+//                    KontrolerServer.posalji(s);
+                
+                }
             }
             
         } catch (IOException ex) {

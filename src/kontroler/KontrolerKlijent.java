@@ -131,7 +131,6 @@ public class KontrolerKlijent {
             try {
                 Klijent noviKlijent;
                 noviKlijent = new Klijent(ime, muskiPol ? "Muski" : "Zenski");
-                
                 KontrolerKlijent.pokreniKlijentGUI(noviKlijent);
                 logInProzor.dispose();
             } catch (IOException ex) {

@@ -51,6 +51,7 @@ public class ServerChat implements Runnable {
                     + " Aktivni korisnici: " 
                         + KontrolerServer.listaAktivnihKlijenataServer);
             KontrolerServer.dodajKorisnika(noviKlijent);
+            KontrolerServer.osveziListuKorisnikaGUI();
             String s;
 
             while (true) {
@@ -58,12 +59,14 @@ public class ServerChat implements Runnable {
 //                    Odraditi stampanje u file, umesto na System.out!
                     System.out.println(noviKlijent.getIme() + ": " + s);
                     KontrolerServer.posalji(s, noviKlijent);
+                    KontrolerServer.ispisiNaServerChat(s, noviKlijent);
                 }
             }
             
         } catch (IOException ex) {
             KontrolerServer.odjaviKorisnika(noviKlijent);
             System.err.println("Prekinuta veza sa korisnikom: " + noviKlijent.getIme());
+            KontrolerServer.osveziListuKorisnikaGUI();
         }
         
         

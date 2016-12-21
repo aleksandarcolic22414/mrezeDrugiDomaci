@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,7 +27,8 @@ import kontroler.KontrolerKlijent;
  */
 public class Klijent implements Runnable {
     
-    public static final int PORT = 444;
+    private int UDP_PORT = -1;
+    public static final int PORT = 1234;
 //    lokalna ip adresa /// promeniti po potrebi
     public static final String ADDRESS = "localhost";
     private String ime;
@@ -37,6 +40,7 @@ public class Klijent implements Runnable {
     private static String porukaPrimljenaPoruka = null;
     private PrintStream OUT;
     private BufferedReader IN;
+    
     
     public Klijent(){}
 
@@ -51,7 +55,14 @@ public class Klijent implements Runnable {
         this.pol = pol;
         this.soc = soc;
     }
-    
+
+    public int getUDP_PORT() {
+        return UDP_PORT;
+    }
+
+    public void setUDP_PORT(int UDP_PORT) {
+        this.UDP_PORT = UDP_PORT;
+    }
     
     public String getIme() {
         return ime;
@@ -138,17 +149,36 @@ public class Klijent implements Runnable {
             OUT.println(this);
             String s = IN.readLine();
             System.out.println(s);
+            s = IN.readLine();
+            System.out.println("Port odgovor od servera: " + s);
+            setUDP_PORT(Integer.parseInt(s));
             
         } catch (IOException ex) {
             Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
         } 
     
     }
-
-    public void posalji(String poruka) {
-        OUT.println(poruka);
+    
+    public void posalji(String []poruka) {
+        String novaPoruka = "";
+        for (int i = 0; i < poruka.length; i++) {
+            novaPoruka = novaPoruka + poruka[i];
+            if (i != poruka.length - 1)
+                novaPoruka += "\n";
+        }
+        OUT.println(novaPoruka);
     }
-
+    
+    public void posalji(String poruka, String niz[]) {
+        String novaPoruka = poruka + "\n";
+        for (int i = 0; i < niz.length; i++) {
+            novaPoruka = novaPoruka + niz[i];
+            if (i != niz.length - 1)
+                novaPoruka += ",";
+        }
+        OUT.println(novaPoruka);
+    }
+    
     @Override
     public String toString() {
         return this.ime + " " + this.pol;
@@ -173,6 +203,6 @@ public class Klijent implements Runnable {
     public void run() {
         slusaj();
     }
-    
-    
+
+  
 }

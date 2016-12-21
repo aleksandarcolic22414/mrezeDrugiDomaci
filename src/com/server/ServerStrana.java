@@ -25,8 +25,8 @@ import kontroler.KontrolerServer;
  */
 public class ServerStrana {
     
-    public static final int PORT = 444;
-    
+    public static final int PORT = 1234;
+        
     public ServerStrana(){}
    
     public void startServer() throws IOException{

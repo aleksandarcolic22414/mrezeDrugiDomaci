@@ -6,10 +6,12 @@
 package com.gui;
 
 import com.klijent.Klijent;
+import java.awt.List;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -61,17 +63,17 @@ public class KlijentGUIp extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtNovaPoruka = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtAktivniKlijenti = new javax.swing.JTextArea();
         btnPosalji = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtAktivanKorisnik = new javax.swing.JTextField();
+        listAktivniKlijenti = new java.awt.List();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Chat Klijent");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(435, 270));
         setPreferredSize(new java.awt.Dimension(650, 350));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -100,11 +102,6 @@ public class KlijentGUIp extends javax.swing.JFrame {
 
         jLabel2.setText("Aktivni klijenti:");
 
-        txtAktivniKlijenti.setEditable(false);
-        txtAktivniKlijenti.setColumns(20);
-        txtAktivniKlijenti.setRows(5);
-        jScrollPane2.setViewportView(txtAktivniKlijenti);
-
         btnPosalji.setText("Posalji");
         btnPosalji.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,6 +113,8 @@ public class KlijentGUIp extends javax.swing.JFrame {
 
         txtAktivanKorisnik.setEditable(false);
 
+        listAktivniKlijenti.setMultipleMode(true);
+
         javax.swing.GroupLayout pnlGlavniLayout = new javax.swing.GroupLayout(pnlGlavni);
         pnlGlavni.setLayout(pnlGlavniLayout);
         pnlGlavniLayout.setHorizontalGroup(
@@ -123,25 +122,21 @@ public class KlijentGUIp extends javax.swing.JFrame {
             .addGroup(pnlGlavniLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlGlavniLayout.createSequentialGroup()
-                        .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlGlavniLayout.createSequentialGroup()
-                                .addComponent(txtNovaPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(btnPosalji, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtNovaPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnPosalji, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(30, 30, 30)
+                .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlGlavniLayout.createSequentialGroup()
-                        .addComponent(lblPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(250, 250, 250)
-                        .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlGlavniLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtAktivanKorisnik, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAktivanKorisnik, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(listAktivniKlijenti, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         pnlGlavniLayout.setVerticalGroup(
             pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +149,7 @@ public class KlijentGUIp extends javax.swing.JFrame {
                 .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlGlavniLayout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
@@ -163,7 +158,8 @@ public class KlijentGUIp extends javax.swing.JFrame {
                         .addGroup(pnlGlavniLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNovaPoruka, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnPosalji, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(listAktivniKlijenti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
 
         getContentPane().add(pnlGlavni, java.awt.BorderLayout.CENTER);
@@ -174,8 +170,7 @@ public class KlijentGUIp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPosaljiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosaljiActionPerformed
-        KontrolerKlijent.posalji();
-        getTxtNovaPoruka().setText("");
+        KontrolerKlijent.posalji();    
     }//GEN-LAST:event_btnPosaljiActionPerformed
 
     private void txtNovaPorukaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNovaPorukaKeyPressed
@@ -200,11 +195,10 @@ public class KlijentGUIp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblPoruka;
+    private java.awt.List listAktivniKlijenti;
     private javax.swing.JPanel pnlGlavni;
     private javax.swing.JTextField txtAktivanKorisnik;
-    private javax.swing.JTextArea txtAktivniKlijenti;
     private javax.swing.JTextField txtNovaPoruka;
     private javax.swing.JTextArea txtPoruka;
     // End of variables declaration//GEN-END:variables
@@ -223,14 +217,6 @@ public class KlijentGUIp extends javax.swing.JFrame {
 
     public void setPnlGlavni(JPanel pnlGlavni) {
         this.pnlGlavni = pnlGlavni;
-    }
-
-    public JTextArea getTxtAktivniKlijenti() {
-        return txtAktivniKlijenti;
-    }
-
-    public void setTxtAktivniKlijenti(JTextArea txtAktivniKlijenti) {
-        this.txtAktivniKlijenti = txtAktivniKlijenti;
     }
 
     public final JTextField getTxtNovaPoruka() {
@@ -256,5 +242,13 @@ public class KlijentGUIp extends javax.swing.JFrame {
     public void setTxtAktivanKorisnik(JTextField txtAktivanKorisnik) {
         this.txtAktivanKorisnik = txtAktivanKorisnik;
     }
-    
+
+    public List getListAktivniKlijenti() {
+        return listAktivniKlijenti;
+    }
+
+    public void setListAktivniKlijenti(List listAktivniKlijenti) {
+        this.listAktivniKlijenti = listAktivniKlijenti;
+    }
+
 }

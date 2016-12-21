@@ -14,8 +14,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kontroler.KontrolerServer;
-import sun.java2d.d3d.D3DRenderQueue;
-
 
 
 public class ServerChat implements Runnable {
@@ -50,15 +48,24 @@ public class ServerChat implements Runnable {
             noviKlijent.getOUT().println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() 
                     + " Aktivni korisnici: " 
                         + KontrolerServer.listaAktivnihKlijenataServer);
+            
+            KontrolerServer.dodeliUDP_PORT(noviKlijent);
             KontrolerServer.dodajKorisnika(noviKlijent);
             KontrolerServer.osveziListuKorisnikaGUI();
+            noviKlijent.getOUT().println(
+                    Integer.toString(
+                            noviKlijent.getUDP_PORT()));
+            Thread.sleep(2000);
+            KontrolerServer.posaljiListuKorisnikaUDP(noviKlijent);
+            
             String s;
 
             while (true) {
                 while ((s = IN.readLine()) != null) {
 //                    Odraditi stampanje u file, umesto na System.out!
                     System.out.println(noviKlijent.getIme() + ": " + s);
-                    KontrolerServer.posalji(s, noviKlijent);
+                    String klijentiKojimaSeSalje = IN.readLine();
+                    KontrolerServer.posalji(s, klijentiKojimaSeSalje, noviKlijent);
                     KontrolerServer.ispisiNaServerChat(s, noviKlijent);
                 }
             }
@@ -67,7 +74,10 @@ public class ServerChat implements Runnable {
             KontrolerServer.odjaviKorisnika(noviKlijent);
             System.err.println("Prekinuta veza sa korisnikom: " + noviKlijent.getIme());
             KontrolerServer.osveziListuKorisnikaGUI();
-        }
+            KontrolerServer.posaljiListuKorisnikaUDP(noviKlijent);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ServerChat.class.getName()).log(Level.SEVERE, null, ex);
+        } 
         
         
     }

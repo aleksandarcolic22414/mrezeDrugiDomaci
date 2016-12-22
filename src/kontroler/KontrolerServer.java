@@ -8,13 +8,20 @@ package kontroler;
 import com.gui.ServerGUI;
 import com.klijent.Klijent;
 import com.server.ServerStrana;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,13 +30,18 @@ public class KontrolerServer {
     
 //    public static final int UDP_PORT = 8091;
     public static ArrayList<Klijent> listaAktivnihKlijenataServer;
+    public static LinkedList<Klijent> kontrolnaLista;
     public static ServerGUI serverProzor;
     private static int UDPPorts[];
     private static int freeUDPPort;
+    private static final String FILE_LOCATION = "ServerInfo.txt";
+    private static PrintWriter OUT_FILE;
+    private static File server_file;
     
     public static void main(String[] args) {
         try {
             inicijalizacijeUDP();
+            KontrolerServer.otvoriFile();
             listaAktivnihKlijenataServer = new ArrayList<>();
             serverProzor = new ServerGUI();
             serverProzor.setVisible(true);
@@ -48,13 +60,47 @@ public class KontrolerServer {
         for (String klijent : nizKlijenata) {
             for (Klijent serverKlijent : listaAktivnihKlijenataServer) {
                 if (klijent.equals(serverKlijent.getIme())) {
-                    serverKlijent.getOUT().println(
-                            noviKlijent.getIme() + ": " + s);
+                    KontrolerServer.posaljiSaProverom(noviKlijent, serverKlijent, s);
                 }
             }
         }
+        KontrolerServer.verifikacijaSlanja(noviKlijent);
+        KontrolerServer.obrisiKontrolnuListu();
     }
 
+    private static void posaljiSaProverom
+    (Klijent noviKlijent, Klijent serverKlijent, String s)
+    {
+        try {
+            serverKlijent.getOUT().println(
+                    noviKlijent.getIme() + ": " + s);
+            
+        } catch (Exception E) {
+            if (kontrolnaLista == null)
+                kontrolnaLista = new LinkedList<>();
+            kontrolnaLista.addLast(serverKlijent);
+        }
+    }
+    
+    private static void verifikacijaSlanja(Klijent noviKlijent) {
+        if (kontrolnaLista == null) {
+            noviKlijent.getOUT().println("server:success");
+        } else {
+            String odgovorServera = "server:fail:";
+            for (int i = 0; i < kontrolnaLista.size(); i++) {
+                odgovorServera += kontrolnaLista.get(i).getIme();
+                if (i != kontrolnaLista.size() - 1)
+                    odgovorServera += ",";
+            }
+            noviKlijent.getOUT().println(odgovorServera);
+        }
+    }
+    
+    private static void obrisiKontrolnuListu() {
+        if (kontrolnaLista != null)
+            kontrolnaLista = null;
+    }
+    
     public static void dodajKorisnika(Klijent noviKlijent) {
         listaAktivnihKlijenataServer.add(noviKlijent);
     }
@@ -94,12 +140,16 @@ public class KontrolerServer {
     public static void ugasiServer() {
         try {
             for (int i = 0; i < listaAktivnihKlijenataServer.size(); i++) {
-                Socket soc = listaAktivnihKlijenataServer.get(i).getSoc();
-                if (soc.isConnected())
-                    soc.close();
-                listaAktivnihKlijenataServer.remove(i);
+                Klijent k = listaAktivnihKlijenataServer.get(i);
+                if (k.getSoc().isConnected()) {
+                    k.getOUT().println("server:turnoff");
+                    k.getSoc().close();
+                }
             }
+            listaAktivnihKlijenataServer.clear();
             serverProzor.dispose();
+            KontrolerServer.stampajUFileGasenje();
+            OUT_FILE.close();
         } catch (IOException ex) {
                 Logger.getLogger(KontrolerServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -154,6 +204,79 @@ public class KontrolerServer {
             UDPPorts[i] = 8000 + i;
         }
     }
- 
-    
+
+    public static void stampajUFile(String s, Klijent k) {
+        GregorianCalendar vreme = new GregorianCalendar();
+        int dan = vreme.get(GregorianCalendar.DAY_OF_MONTH);
+        int mesec = vreme.get(GregorianCalendar.MONTH);
+        ++mesec;
+        int godina = vreme.get(GregorianCalendar.YEAR);
+        int sat = vreme.get(GregorianCalendar.HOUR_OF_DAY);
+        int minut = vreme.get(GregorianCalendar.MINUTE);
+        int sekund = vreme.get(GregorianCalendar.SECOND);
+        OUT_FILE.print(dan + "." + mesec + "." + godina + " "
+            + sat + ":" + minut + ":" + sekund + " "); 
+        OUT_FILE.println(k.getIme() + ": " + s); 
+    }
+
+    private static void otvoriFile() {
+        try {
+            server_file = new File(FILE_LOCATION);
+            if (!server_file.exists())
+                server_file.createNewFile();
+            
+            OUT_FILE = new PrintWriter(
+                    new BufferedWriter(
+                            new FileWriter(server_file, true)));
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(KontrolerServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(KontrolerServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void stampajUFileOdjava(String s, Klijent noviKlijent) {
+        GregorianCalendar vreme = new GregorianCalendar();
+        int dan = vreme.get(GregorianCalendar.DAY_OF_MONTH);
+        int mesec = vreme.get(GregorianCalendar.MONTH);
+        ++mesec;
+        int godina = vreme.get(GregorianCalendar.YEAR);
+        int sat = vreme.get(GregorianCalendar.HOUR_OF_DAY);
+        int minut = vreme.get(GregorianCalendar.MINUTE);
+        int sekund = vreme.get(GregorianCalendar.SECOND);
+        OUT_FILE.print(dan + "." + mesec + "." + godina + " "
+            + sat + ":" + minut + ":" + sekund + " "); 
+        OUT_FILE.println("Prekinuta veza sa korisnikom: " + noviKlijent.getIme());
+    }
+
+    private static void stampajUFileGasenje() {
+        GregorianCalendar vreme = new GregorianCalendar();
+        int dan = vreme.get(GregorianCalendar.DAY_OF_MONTH);
+        int mesec = vreme.get(GregorianCalendar.MONTH);
+        ++mesec;
+        int godina = vreme.get(GregorianCalendar.YEAR);
+        int sat = vreme.get(GregorianCalendar.HOUR_OF_DAY);
+        int minut = vreme.get(GregorianCalendar.MINUTE);
+        int sekund = vreme.get(GregorianCalendar.SECOND);
+        OUT_FILE.print(dan + "." + mesec + "." + godina + " "
+            + sat + ":" + minut + ":" + sekund + " ");
+        OUT_FILE.println("Gasenje servera!");
+    }
+
+    public static void stampajUFileObicno(String s) {
+        GregorianCalendar vreme = new GregorianCalendar();
+        int dan = vreme.get(GregorianCalendar.DAY_OF_MONTH);
+        int mesec = vreme.get(GregorianCalendar.MONTH);
+        ++mesec;
+        int godina = vreme.get(GregorianCalendar.YEAR);
+        int sat = vreme.get(GregorianCalendar.HOUR_OF_DAY);
+        int minut = vreme.get(GregorianCalendar.MINUTE);
+        int sekund = vreme.get(GregorianCalendar.SECOND);
+        OUT_FILE.print(dan + "." + mesec + "." + godina + " "
+            + sat + ":" + minut + ":" + sekund + " ");
+        OUT_FILE.println(s);
+    }
+
+       
 }

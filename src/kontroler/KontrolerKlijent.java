@@ -12,7 +12,6 @@ import com.klijent.KlijentZaSlanjeUDP;
 import com.klijent.udp.KlijentUDP;
 import java.awt.List;
 import java.io.IOException;
-import java.net.DatagramSocketImpl;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class KontrolerKlijent {
     private static logInKorisnikGUI logInProzor;
     private static Klijent aktivniKlijent;
     private static KlijentUDP slusanjeUDPZahteva;
-    
+
 
     private boolean porukaPrimljenaServer  = false;
     private boolean porukaSpremnaServer    = false;
@@ -112,7 +111,11 @@ public class KontrolerKlijent {
             String niz[] = glavniProzor.getListAktivniKlijenti().getSelectedItems();
             
             if (niz.length == 0) {
-                glavniProzor.getTxtPoruka().append("Odaberite klijente suprotnog pola.");
+                JOptionPane.showMessageDialog(
+                    null, "Odaberite osobe koja zelite da posaljete "
+                            + "poruku\n(poruka se moze poslati samo"
+                                + " osobama suprotnog pola)",
+                                    "Upozorenje", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             
@@ -128,8 +131,9 @@ public class KontrolerKlijent {
                     }
                 }
                 if (aktivniKlijent.getPol().equals(pol)) {
-                    glavniProzor.getTxtPoruka().append("Mozete poslati poruku "
-                            + "samo osobama suprotnog pola!\n");
+                    JOptionPane.showMessageDialog(
+                            null, "Mozete slati poruke samo osobama suprotnog pola!",
+                                "Upozorenje", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                     
@@ -205,6 +209,42 @@ public class KontrolerKlijent {
         aktivniKlijent.posalji(niz);
     }
     
+    public static void verifikacijaPoruke(String porukaPrimljenaPoruka) {
+        if (porukaPrimljenaPoruka.startsWith("server:")) {
+            String s = porukaPrimljenaPoruka.substring(
+                    porukaPrimljenaPoruka.indexOf(":") + 1);
+            if (s.startsWith("success")) {
+                System.out.println("Uspesno poslata poruka.");
+            } else if (s.startsWith("turnoff")){
+                KontrolerKlijent.ispisiPoruku("Doslo je do gasenja servera!");
+                JOptionPane.showMessageDialog(null, "Doslo je do prekida konekcije sa serverom!",
+                    "Gasenje servera!", JOptionPane.ERROR_MESSAGE);
+            } else {
+                s = s.substring(s.indexOf(":") + 1);
+                KontrolerKlijent.ispisiPoruku(
+                        "Neuspesno slanje poruke ka klijentu/ima: "
+                            + s);
+            }
+        } else {
+            KontrolerKlijent.ispisiPoruku(porukaPrimljenaPoruka);
+        }
+    }
     
+     public static void ispisiPrekidKonekcije() {
+         glavniProzor.getTxtPoruka().append("Doslo je do prekida konekcije!"
+                 + " Proverite vasu internet konekciju, "
+                    + "pa pokrenite ponovo aplikaciju!");
+     }
     
+     
+    public static void proveraKonekcijeISlanje() {
+        if (!aktivniKlijent.getSoc().isConnected()) {
+            KontrolerKlijent.ispisiPrekidKonekcije();
+            JOptionPane.showMessageDialog(null, "Doslo je do problema prilikom povezivanja sa serverom!",
+                    "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
+        } else
+            KontrolerKlijent.posalji(); 
+    }
+     
+     
 }

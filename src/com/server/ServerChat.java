@@ -48,31 +48,33 @@ public class ServerChat implements Runnable {
             noviKlijent.getOUT().println("Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme() 
                     + " Aktivni korisnici: " 
                         + KontrolerServer.listaAktivnihKlijenataServer);
-            
+            KontrolerServer.stampajUFileObicno(
+                    "Ostvarena konekcija! " + "Korisnik: " + noviKlijent.getIme());
             KontrolerServer.dodeliUDP_PORT(noviKlijent);
             KontrolerServer.dodajKorisnika(noviKlijent);
             KontrolerServer.osveziListuKorisnikaGUI();
             noviKlijent.getOUT().println(
                     Integer.toString(
                             noviKlijent.getUDP_PORT()));
-            Thread.sleep(2000);
+            Thread.sleep(200);
             KontrolerServer.posaljiListuKorisnikaUDP(noviKlijent);
             
             String s;
 
             while (true) {
                 while ((s = IN.readLine()) != null) {
-//                    Odraditi stampanje u file, umesto na System.out!
                     System.out.println(noviKlijent.getIme() + ": " + s);
                     String klijentiKojimaSeSalje = IN.readLine();
                     KontrolerServer.posalji(s, klijentiKojimaSeSalje, noviKlijent);
                     KontrolerServer.ispisiNaServerChat(s, noviKlijent);
+                    KontrolerServer.stampajUFile(s, noviKlijent);
                 }
             }
             
         } catch (IOException ex) {
             KontrolerServer.odjaviKorisnika(noviKlijent);
             System.err.println("Prekinuta veza sa korisnikom: " + noviKlijent.getIme());
+            KontrolerServer.stampajUFileOdjava("Prekinuta veza sa korisnikom!", noviKlijent);
             KontrolerServer.osveziListuKorisnikaGUI();
             KontrolerServer.posaljiListuKorisnikaUDP(noviKlijent);
         } catch (InterruptedException ex) {

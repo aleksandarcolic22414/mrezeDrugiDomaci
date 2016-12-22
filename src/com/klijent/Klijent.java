@@ -1,14 +1,11 @@
 package com.klijent;
 
 
-import com.server.ServerStrana;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -188,13 +185,17 @@ public class Klijent implements Runnable {
         while (true) {
             try {
                 if ((porukaPrimljenaPoruka = IN.readLine()) != null) {
-                    KontrolerKlijent.ispisiPoruku(porukaPrimljenaPoruka);
+                    KontrolerKlijent.verifikacijaPoruke(porukaPrimljenaPoruka);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Klijent.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Doslo je do prekida konekcije sa serverom!",
                     "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
+                KontrolerKlijent.ispisiPrekidKonekcije();
                 return;
+            } catch (Exception E) {
+                JOptionPane.showMessageDialog(null, "Doslo je do prekida konekcije sa serverom!",
+                    "Neuspesno povezivanje!", JOptionPane.ERROR_MESSAGE);
             }
         }
     } 

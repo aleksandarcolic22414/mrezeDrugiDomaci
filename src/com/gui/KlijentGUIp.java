@@ -170,7 +170,7 @@ public class KlijentGUIp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPosaljiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPosaljiActionPerformed
-        KontrolerKlijent.posalji();    
+        KontrolerKlijent.proveraKonekcijeISlanje();
     }//GEN-LAST:event_btnPosaljiActionPerformed
 
     private void txtNovaPorukaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNovaPorukaKeyPressed

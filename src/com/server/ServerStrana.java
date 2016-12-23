@@ -32,6 +32,7 @@ public class ServerStrana {
     public void startServer() throws IOException{
         
         ServerSocket serverSocket = new ServerSocket(PORT);
+        KontrolerServer.stampajUFileObicno("**Podizanje servera!");
         
         try {
             while (true) {

@@ -1,18 +1,19 @@
-22.12.2016 19:9:34 Ostvarena konekcija! Korisnik: aca
-22.12.2016 19:9:37 Prekinuta veza sa korisnikom: aca
-22.12.2016 19:9:38 Gasenje servera!
-22.12.2016 19:10:8 Ostvarena konekcija! Korisnik: aca
-22.12.2016 19:10:16 Ostvarena konekcija! Korisnik: jovana
-22.12.2016 19:10:21 Prekinuta veza sa korisnikom: jovana
-22.12.2016 19:10:21 Prekinuta veza sa korisnikom: aca
-22.12.2016 19:10:21 Gasenje servera!
-22.12.2016 19:14:18 Ostvarena konekcija! Korisnik: aca
-22.12.2016 19:15:37 Prekinuta veza sa korisnikom: aca
-22.12.2016 19:17:45 Gasenje servera!
-22.12.2016 19:33:4 Ostvarena konekcija! Korisnik: aca
-22.12.2016 19:33:10 Ostvarena konekcija! Korisnik: jovana
-22.12.2016 19:33:19 Ostvarena konekcija! Korisnik: jole
-22.12.2016 19:33:42 jovana: Pozdrav momci!
-22.12.2016 19:34:1 Prekinuta veza sa korisnikom: aca
-22.12.2016 19:34:1 Prekinuta veza sa korisnikom: jovana
-22.12.2016 19:34:1 Gasenje servera!
+23.12.2016 2:27:44 **Podizanje servera!
+23.12.2016 2:27:46 Gasenje servera!
+23.12.2016 2:28:48 **Podizanje servera!
+23.12.2016 2:28:52 Ostvarena konekcija! Korisnik: aca
+23.12.2016 2:28:58 Ostvarena konekcija! Korisnik: jovana
+23.12.2016 2:29:6 jovana: Pozdrav za acu!
+23.12.2016 2:29:9 Prekinuta veza sa korisnikom: aca
+23.12.2016 2:29:9 Prekinuta veza sa korisnikom: jovana
+23.12.2016 2:29:9 **Gasenje servera!
+23.12.2016 2:32:56 **Podizanje servera!
+23.12.2016 2:33:2 Ostvarena konekcija! Korisnik: aca
+23.12.2016 2:33:5 Prekinuta veza sa korisnikom: aca
+23.12.2016 2:33:6 **Gasenje servera!
+23.12.2016 2:33:23 **Podizanje servera!
+23.12.2016 2:33:28 Ostvarena konekcija! Korisnik: aca
+23.12.2016 2:33:30 Prekinuta veza sa korisnikom: aca
+23.12.2016 2:34:15 Ostvarena konekcija! Korisnik: aca
+23.12.2016 2:34:18 Prekinuta veza sa korisnikom: aca
+23.12.2016 2:34:22 **Gasenje servera!

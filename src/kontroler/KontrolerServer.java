@@ -28,7 +28,8 @@ import java.util.logging.Logger;
 
 public class KontrolerServer {
     
-//    public static final int UDP_PORT = 8091;
+//    public static final int UDP_PORT = 8091; -> ako se pokrece jedna aplikacija
+//    sa jednog racunara.
     public static ArrayList<Klijent> listaAktivnihKlijenataServer;
     public static LinkedList<Klijent> kontrolnaLista;
     public static ServerGUI serverProzor;
@@ -37,7 +38,8 @@ public class KontrolerServer {
     private static final String FILE_LOCATION = "ServerInfo.txt";
     private static PrintWriter OUT_FILE;
     private static File server_file;
-    
+//    private static final byte IP_SOBA[] = {24, (byte)135, 62, 56};
+            
     public static void main(String[] args) {
         try {
             inicijalizacijeUDP();
@@ -161,8 +163,7 @@ public class KontrolerServer {
         try {
             byte buff[];
             DatagramSocket soket = new DatagramSocket();
-            InetAddress address = noviKlijent.getSoc().getInetAddress();
-            
+//            InetAddress address = noviKlijent.getSoc().getRemoteSocketAddress();
             String listaKorisnikaZaSlanje = "";
             for (int i = 0; i < listaAktivnihKlijenataServer.size(); i++) {
                 listaKorisnikaZaSlanje += listaAktivnihKlijenataServer.get(i).getIme();
@@ -174,9 +175,13 @@ public class KontrolerServer {
             buff = listaKorisnikaZaSlanje.getBytes();
             
             for (int i = 0; i < listaAktivnihKlijenataServer.size(); i++) {
+                Klijent k = listaAktivnihKlijenataServer.get(i);
+//                Uzimamo lokalnu adresu, s'obzirom da su svi klijenti na ovom racunaru
+//                Promeniti ako se pravi normalan cet!
+//                InetAddress address = InetAddress.getByName("192.168.1.13");
+                InetAddress address = InetAddress.getLocalHost();
                 DatagramPacket paket = new DatagramPacket(
-                        buff, buff.length, address,
-                            listaAktivnihKlijenataServer.get(i).getUDP_PORT());
+                        buff, buff.length, address, k.getUDP_PORT());
                 soket.send(paket);
             }
             
@@ -261,7 +266,7 @@ public class KontrolerServer {
         int sekund = vreme.get(GregorianCalendar.SECOND);
         OUT_FILE.print(dan + "." + mesec + "." + godina + " "
             + sat + ":" + minut + ":" + sekund + " ");
-        OUT_FILE.println("Gasenje servera!");
+        OUT_FILE.println("**Gasenje servera!");
     }
 
     public static void stampajUFileObicno(String s) {
